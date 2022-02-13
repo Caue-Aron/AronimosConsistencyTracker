@@ -1,6 +1,8 @@
 from tkinter import *
-from TrackerTab import TrackerTab
 from tkinter import ttk
+from TrackerTab import TrackerTab
+from RightClickMenu import RightClickMenu
+from Config import hot_keys
 
 # pyinstaller --onefile main.pyw
 
@@ -24,20 +26,9 @@ class Main(Toplevel):
         self.y = 0
 
         # ------------------------------------------------------------------------------
-        # adding menu cascade
-        self.mb_menu = Menu(self)
-        self.config(menu=self.mb_menu)
-
-        self.m_file = Menu(self.mb_menu, tearoff=False)
-        self.mb_menu.add_cascade(label='File', menu=self.m_file)
-
-        self.m_file.add_command(label='Open')
-        self.m_file.add_command(label='Save')
-        self.m_file.add_command(label='Exit', command=self.on_menu_Exit)
-
-        # ------------------------------------------------------------------------------
         # setting widgets
         self.tracker_tab = TrackerTab(self)
+        self.m_menu = RightClickMenu(self)
 
         self.tracker_tab.grid(row=0, column=0)
 
@@ -45,25 +36,28 @@ class Main(Toplevel):
         # setting commands
         self.bind("<ButtonPress-1>",    self.start_move)
         self.bind("<ButtonRelease-1>",  self.stop_move)
-        self.bind("<B1-Motion>",        self.do_move)
+        self.bind("<B1-Motion>",        self.move)
+        self.bind("<Button-3>",         self.popup)
+        self.bind('<Key>',              self.hot_key)
+        self.bind('<Escape>',           self.close)
 
-        self.bind('<Key>', self.hot_key)
+        self.focus_force()
 
     def hot_key(self, event):
 
         success = self.tracker_tab.tracker_area.f_success_counter
         fail = self.tracker_tab.tracker_area.f_fail_counter
 
-        if event.char.upper() == 'A':
+        if event.char.upper() == hot_keys['add_success']:
             success.btn_add.invoke()
 
-        elif event.char.upper() == 'S':
+        elif event.char.upper() == hot_keys['subtract_success']:
             success.btn_subtract.invoke()
 
-        elif event.char.upper() == 'Z':
+        elif event.char.upper() == hot_keys['add_fail']:
             fail.btn_add.invoke()
 
-        elif event.char.upper() == 'X':
+        elif event.char.upper() == hot_keys['subtract_fail']:
             fail.btn_subtract.invoke()
 
     # ------------------------------------------------------------------------------
@@ -76,16 +70,20 @@ class Main(Toplevel):
         self.x = None
         self.y = None
 
-    def do_move(self, event):
+    def move(self, event):
         deltax = event.x - self.x
         deltay = event.y - self.y
         x = self.winfo_x() + deltax
         y = self.winfo_y() + deltay
         self.geometry(f"+{x}+{y}")
 
-    # ------------------------------------------------------------------------------
-    # menu bar commands
-    def on_menu_Exit(self):
+    def popup(self, event):
+        try:
+            self.m_menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            self.m_menu.grab_release()
+
+    def close(self, event):
         self.parent.destroy()
 
 app = Tk()

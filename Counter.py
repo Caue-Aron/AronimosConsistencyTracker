@@ -1,14 +1,14 @@
 from tkinter import *
 from tkinter import ttk
-from Config import main_window
+from Config import counter_config
 
-button_width = main_window['button_width']
-button_height = main_window['button_height']
-button_add_color = main_window['button_add_color']
-button_subtract_color = main_window['button_subtract_color']
-button_pady = main_window['button_pady']
+button_width = counter_config['button_width']
+button_height = counter_config['button_height']
+button_add_color = counter_config['button_add_color']
+button_subtract_color = counter_config['button_subtract_color']
+button_pady = counter_config['button_pady']
 
-entry_width = main_window['entry_width']
+entry_width = counter_config['entry_width']
 
 class Counter(Frame):
     def __init__(self, parent, text, *args, **kwargs):

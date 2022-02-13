@@ -1,6 +1,6 @@
 # here are all configurations of the program. Use this file to modify the program as you please
 
-main_window = {
+counter_config = {
     'button_width': 5,
     'button_height': 1,
     'button_pady': (0, 5),
@@ -8,4 +8,11 @@ main_window = {
     'button_subtract_color': '#ff7f27',
 
     'entry_width': 15
+}
+
+hot_keys = {
+    'add_success': 'A',
+    'subtract_success': 'S',
+    'add_fail': 'Z',
+    'subtract_fail': 'X'
 }
