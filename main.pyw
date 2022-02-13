@@ -64,7 +64,7 @@ class Main(Toplevel):
             fail.btn_add.invoke()
 
         elif event.char.upper() == 'X':
-            fail.invoke()
+            fail.btn_subtract.invoke()
 
     # ------------------------------------------------------------------------------
     # drag and drop window
