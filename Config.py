@@ -1,4 +1,6 @@
 # here are all configurations of the program. Use this file to modify the program as you please
+from tkinter.font import Font
+
 
 counter_config = {
     'button_width': 5,

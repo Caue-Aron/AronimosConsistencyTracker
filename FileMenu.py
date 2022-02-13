@@ -26,4 +26,4 @@ class FileMenu(Menu):
         pass
 
     def on_menu_Exit(self):
-        self.parent.parent.parent.destroy()
+        self.parent.parent.destroy()

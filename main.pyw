@@ -8,17 +8,10 @@ from Config import hot_keys
 
 # ------------------------------------------------------------------------------
 # main window
-class Main(Toplevel):
+class Main(Tk):
 
-    def __init__(self, parent, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)
-
-        # ------------------------------------------------------------------------------
-        # window properties
-        self.overrideredirect(True)
-        self.attributes('-topmost', 1)
-        self.grab_set()
-        self.parent = parent
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         # ------------------------------------------------------------------------------
         # used to drag and drop the window
@@ -84,13 +77,7 @@ class Main(Toplevel):
             self.m_menu.grab_release()
 
     def close(self, event):
-        self.parent.destroy()
+        self.destroy()
 
-app = Tk()
-app.title("Aronimo's Consistency Tracker")
-app.lower()
-app.iconify()
-
-main = Main(app)
-
-app.mainloop()
+main = Main()
+main.mainloop()
