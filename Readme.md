@@ -23,4 +23,4 @@ FAQ:
 5. Why does it take so many time for newer versions?
     R: After version 1.0, chances are I won't touch the project for a very long time. But until there, it is possible that newer versions will take a long time to make. I am a reaaallllyy ocupied person.
 
-Shout outs to the BR SM64 Community
+Shout outs to the BR SM64 Community S2
