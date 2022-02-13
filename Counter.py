@@ -19,7 +19,7 @@ class Counter(Frame):
         self.btn_add =      Button(self.lbf_frame, text='+', bg=button_add_color, relief='groove', width=button_width, height=button_height)
         self.btn_subtract = Button(self.lbf_frame, text='-', bg=button_subtract_color, relief='groove', width=button_width, height=button_height)
 
-        self.e_entry =      ttk.Entry(self.lbf_frame, width=entry_width)
+        self.e_entry = ttk.Entry(self.lbf_frame, width=entry_width)
         self.e_entry.insert(0, f'{0}')
         self.e_entry.config(state='disabled')
 

@@ -1,3 +1,5 @@
+# here are all configurations of the program. Use this file to modify the program as you please
+
 main_window = {
     'button_width': 5,
     'button_height': 1,

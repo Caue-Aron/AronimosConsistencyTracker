@@ -7,18 +7,24 @@ class TrackerArea(Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
+        # ------------------------------------------------------------------------------
+        # variables used to calculate consistency
         self.success_count = 0
         self.fail_count = 0
         self.tries = 0
 
-        self.f_success_counter = Counter(self, text='Success')
-        self.f_fail_counter = Counter(self, text='Fail')
-        self.f_info = Info(self)
+        # ------------------------------------------------------------------------------
+        # setting widgets
+        self.f_success_counter =    Counter(self, text='Success')
+        self.f_fail_counter =       Counter(self, text='Fail')
+        self.f_info =               Info(self)
 
-        self.f_success_counter.grid(row=0, column=0, sticky='W')
-        self.f_fail_counter.grid(row=1, column=0, sticky='W')
-        self.f_info.grid(row=2, column=0)
+        self.f_success_counter. grid(row=0, column=0, sticky='W')
+        self.f_fail_counter.    grid(row=1, column=0, sticky='W')
+        self.f_info.            grid(row=2, column=0)
 
+        # ------------------------------------------------------------------------------
+        # setting commands
         self.f_success_counter.set_buttons_command(self.success)
         self.f_fail_counter.set_buttons_command(self.fail)
 
@@ -34,6 +40,8 @@ class TrackerArea(Frame):
             info.lb_success_rate.config(text=f'Success rate: {0} out of {0}')
             info.lb_percentage.config(text=f'Percentage: {0}%')
 
+    # ------------------------------------------------------------------------------
+    # commands for consitency managing
     def success(self, number):
         self.success_count += number
 

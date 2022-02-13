@@ -1,64 +1,73 @@
 from tkinter import *
-from TrackerArea import TrackerArea
-from ctypes import windll
+from TrackerTab import TrackerTab
+from tkinter import ttk
 
 # pyinstaller --onefile main.pyw
 
-# Some WindowsOS styles, required for task bar integration
-GWL_EXSTYLE = -20
-WS_EX_APPWINDOW = 0x00040000
-WS_EX_TOOLWINDOW = 0x00000080
+# ------------------------------------------------------------------------------
+# main window
+class Main(Toplevel):
 
-def set_appwindow(mainWindow):
-    # Honestly forgot what most of this stuff does. I think it's so that you can see
-    # the program in the task bar while using overridedirect. Most of it is taken
-    # from a post I found on stackoverflow.
-    hwnd = windll.user32.GetParent(mainWindow.winfo_id())
-    stylew = windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
-    stylew = stylew & ~WS_EX_TOOLWINDOW
-    stylew = stylew | WS_EX_APPWINDOW
-    res = windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, stylew)
-    # re-assert the new window style
-    mainWindow.wm_withdraw()
-    mainWindow.after(10, lambda: mainWindow.wm_deiconify())
-
-def on_menu_Exit():
-    app.destroy()
-
-class Main(Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+
+        # ------------------------------------------------------------------------------
+        # window properties
+        self.overrideredirect(True)
+        self.attributes('-topmost', 1)
+        self.grab_set()
         self.parent = parent
+
+        # ------------------------------------------------------------------------------
+        # used to drag and drop the window
         self.x = 0
         self.y = 0
 
-        self.lbf_title = LabelFrame(self, relief='ridge')
-        self.lb_title = Label(self.lbf_title, text="Aronimo's Consistency Tracker")
-        self.tracker_area = TrackerArea(self)
+        # ------------------------------------------------------------------------------
+        # adding menu cascade
+        self.mb_menu = Menu(self)
+        self.config(menu=self.mb_menu)
 
-        self.lbf_title.grid(row=0, column=0, pady=(15, 15))
-        self.lb_title.grid(row=0, column=0)
-        self.tracker_area.grid(row=1, column=0)
+        self.m_file = Menu(self.mb_menu, tearoff=False)
+        self.mb_menu.add_cascade(label='File', menu=self.m_file)
 
-        self.parent.bind("<ButtonPress-1>", self.start_move)
-        self.parent.bind("<ButtonRelease-1>", self.stop_move)
-        self.parent.bind("<B1-Motion>", self.do_move)
+        self.m_file.add_command(label='Open')
+        self.m_file.add_command(label='Save')
+        self.m_file.add_command(label='Exit', command=self.on_menu_Exit)
 
-        self.parent.bind('<Key>', self.hot_key)
+        # ------------------------------------------------------------------------------
+        # setting widgets
+        self.tracker_tab = TrackerTab(self)
+
+        self.tracker_tab.grid(row=0, column=0)
+
+        # ------------------------------------------------------------------------------
+        # setting commands
+        self.bind("<ButtonPress-1>",    self.start_move)
+        self.bind("<ButtonRelease-1>",  self.stop_move)
+        self.bind("<B1-Motion>",        self.do_move)
+
+        self.bind('<Key>', self.hot_key)
 
     def hot_key(self, event):
+
+        success = self.tracker_tab.tracker_area.f_success_counter
+        fail = self.tracker_tab.tracker_area.f_fail_counter
+
         if event.char.upper() == 'A':
-            self.tracker_area.f_success_counter.btn_add.invoke()
+            success.btn_add.invoke()
 
         elif event.char.upper() == 'S':
-            self.tracker_area.f_success_counter.btn_subtract.invoke()
+            success.btn_subtract.invoke()
 
         elif event.char.upper() == 'Z':
-            self.tracker_area.f_fail_counter.btn_add.invoke()
+            fail.btn_add.invoke()
 
         elif event.char.upper() == 'X':
-            self.tracker_area.f_fail_counter.btn_subtract.invoke()
+            fail.invoke()
 
+    # ------------------------------------------------------------------------------
+    # drag and drop window
     def start_move(self, event):
         self.x = event.x
         self.y = event.y
@@ -70,27 +79,20 @@ class Main(Frame):
     def do_move(self, event):
         deltax = event.x - self.x
         deltay = event.y - self.y
-        x = self.parent.winfo_x() + deltax
-        y = self.parent.winfo_y() + deltay
-        self.parent.geometry(f"+{x}+{y}")
+        x = self.winfo_x() + deltax
+        y = self.winfo_y() + deltay
+        self.geometry(f"+{x}+{y}")
+
+    # ------------------------------------------------------------------------------
+    # menu bar commands
+    def on_menu_Exit(self):
+        self.parent.destroy()
 
 app = Tk()
-app.after(10, lambda: set_appwindow(app))
 app.title("Aronimo's Consistency Tracker")
-# app.overrideredirect(True)
-app.resizable(False, False)
-
-mb_menu = Menu(app)
-
-m_file = Menu(mb_menu)
-mb_menu.add_cascade(label='File', menu=m_file)
-m_file.add_command(label='Open')
-m_file.add_command(label='Save')
-m_file.add_command(label='Exit', command=on_menu_Exit)
-
-app.config(menu=mb_menu)
+app.lower()
+app.iconify()
 
 main = Main(app)
-main.grid(row=0, column=0)
 
 app.mainloop()
