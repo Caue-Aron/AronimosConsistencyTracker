@@ -2,7 +2,7 @@ import wx
 
 from TrackerTab import TrackerTab
 from Button import EVT_BUTTON
-import psutil
+import psutil, os
 
 class Main(wx.Frame):
 
@@ -15,8 +15,6 @@ class Main(wx.Frame):
 
         self.x = self.GetPosition()[0]
         self.y = self.GetPosition()[1]
-
-        self.timer = wx.Timer(self, wx.ID_ANY)
 
         # -----------------------------------------------------------------------------------
         # Initializing GUI widgets
@@ -31,27 +29,28 @@ class Main(wx.Frame):
         self.Bind(wx.EVT_LEFT_UP, self.on_LeftRelease)
         self.Bind(wx.EVT_MOTION, self.on_MouseMotion)
         self.Bind(EVT_BUTTON, self.on_Button)
-        self.Bind(wx.EVT_TIMER, self.display_memory, self.timer)
 
         self.SetSizer(sizer)
 
         self.Fit()
         self.Show()
-        self.timer.Start(1000)
 
-    def display_memory(self, evt):
-        print(f"RAM: {psutil.virtual_memory().percent}%")
-        print(f"CPU: {psutil.cpu_percent()}%")
+        # self.timer = wx.Timer(self, wx.ID_ANY)
+        # self.Bind(wx.EVT_TIMER, self.display_memory, self.timer)
+        # self.timer.Start(1000)
+    #
+    # def display_memory(self, evt):
+    #     print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 
     def on_RightDown(self, evt):
         from PopupMenu import PopupMenu
         self.PopupMenu(PopupMenu(), wx.Point(wx.GetMousePosition()[0] - self.GetPosition()[0], wx.GetMousePosition()[1] - self.GetPosition()[1]))
 
     def on_Button(self, evt):
-        if evt.value == 'press':
+        if evt.value:
             self.clicked_button = True
             self.can_click = False
-        elif evt.value == 'release':
+        else:
             self.can_click = True
             self.clicked_button = False
 

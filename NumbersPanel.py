@@ -1,5 +1,5 @@
 import wx
-from DefaultControlBehavior import DefaultPanelBehavior
+from DefaultPanelBehavior import DefaultPanelBehavior
 
 class NumbersPanel(DefaultPanelBehavior):
 
@@ -24,3 +24,6 @@ class NumbersPanel(DefaultPanelBehavior):
 
     def set_label(self, label):
         self.number.SetLabel(str(label))
+
+    def on_LeftDown(self, evt):
+        print('Numbers')

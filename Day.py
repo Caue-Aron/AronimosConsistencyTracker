@@ -11,4 +11,12 @@ class Day:
         self.success = 0
         self.fails = 0
 
-day = Day()
+    def add_success(self, amount):
+        self.success += amount
+
+    def add_fails(self, amount):
+        self.fails += amount
+
+    def get_date(self):
+        value = (self.month, self.day, self.year)
+        return value

@@ -1,5 +1,5 @@
 import wx
-from DefaultControlBehavior import DefaultPanelBehavior
+from DefaultPanelBehavior import DefaultPanelBehavior
 
 class Info(DefaultPanelBehavior):
 

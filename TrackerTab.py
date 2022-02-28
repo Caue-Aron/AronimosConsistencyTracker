@@ -1,8 +1,7 @@
 import wx
 from Info import Info
 from Counter import Counter
-from Button import EVT_BUTTON
-from DefaultControlBehavior import DefaultPanelBehavior
+from DefaultPanelBehavior import DefaultPanelBehavior
 
 class TrackerTab(DefaultPanelBehavior):
 
@@ -33,7 +32,7 @@ class TrackerTab(DefaultPanelBehavior):
 
         # -----------------------------------------------------------------------------------
         # Setting bindings
-        self.Bind(EVT_BUTTON, self.update_info)
+        self.Bind(wx.EVT_BUTTON, self.update_info)
 
     def update_info(self, evt):
         self.success_count = self.success_counter.get_count()
