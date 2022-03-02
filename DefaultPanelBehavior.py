@@ -1,3 +1,5 @@
+# 1.0
+
 import wx
 
 class DefaultPanelBehavior(wx.Panel):

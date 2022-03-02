@@ -29,11 +29,14 @@ class Info(DefaultPanelBehavior):
         self.set_bindings()
 
     def update(self, rate, tries):
-        if rate > 0:
+        if rate >= 0:
             self.st_success_rate.SetLabel(f'Success rate: {rate} out of {tries}')
 
-            if tries > 0:
-                self.st_percentage.SetLabel(f'Percentage: {round((rate / tries) * 100, 2)}%')
+            if tries >= 0:
+                try:
+                    self.st_percentage.SetLabel(f'Percentage: {round((rate / tries) * 100, 2)}%')
+                except ZeroDivisionError:
+                    self.st_percentage.SetLabel(f'Percentage: 0%')
 
         self.GetContainingSizer().Layout()
 

@@ -4,3 +4,5 @@ build
 /dist
 /venv
 *.spec
+*.txt
+*.gitignore

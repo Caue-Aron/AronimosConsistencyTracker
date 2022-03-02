@@ -41,12 +41,18 @@ class Counter(DefaultPanelBehavior):
 
     def add_function(self):
         self.count += 1
-        self.panel.set_label(self.count)
+        self.update_label()
 
     def subtract_function(self):
         if self.count - 1 >= 0:
             self.count -= 1
-            self.panel.set_label(self.count)
+            self.update_label()
+
+    def update_label(self):
+        self.panel.set_label(self.count)
 
     def get_count(self):
         return self.count
+
+    def set_count(self, amount):
+        self.count = amount

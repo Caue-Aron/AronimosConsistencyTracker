@@ -1,26 +1,13 @@
-# ----------------------------------------------------------------------------
-# gswidgetkit Copyright 2021-2022 by Noah Rahm and contributors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ----------------------------------------------------------------------------
-
 import wx
 import wx.lib.agw.flatmenu as flatmenu
 from wx.lib.newevent import NewCommandEvent
+from wx.lib.embeddedimage import PyEmbeddedImage
 
-from constants import ACCENT_COLOR, TEXT_COLOR, DROPDOWN_BG_COLOR
-from utils import GetTextExtent
-from icons import ICON_DROPDOWN_ARROW
+ICON_DROPDOWN_ARROW = PyEmbeddedImage(
+    b'iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAHJJ'
+    b'REFUSIntkEENg1AQBYc6+Q7AQaUgBSdIQAJIwMG0DuqgHNqE088C6anZOe5udl4eJEny56iT'
+    b'2gY3vTrU9rfA8QTmmkTtgRF4RGGjhO/vs3D+E4k6qq+oPoDmjIRPHQvQAfdSyno1dFWirkeS'
+    b'J0myswFVsUqvSX87GAAAAABJRU5ErkJggg==')
 
 # Max number of items that can be added to the menu is 100
 DROPDOWNMENU_ITEM_IDS = wx.NewIdRef(100)
@@ -29,7 +16,7 @@ DROPDOWNMENU_ITEM_IDS = wx.NewIdRef(100)
 dropdown_cmd_event, EVT_DROPDOWN = NewCommandEvent()
 
 
-class DropDown(wx.Control):
+class ComboBox(wx.Control):
     """
     Dropdown widget for selecting a value from a list of choices.
 
@@ -50,7 +37,7 @@ class DropDown(wx.Control):
         self.longest_str = max(items, key=len)  # Longest string in the choices
 
         self.buffer = None
-        self.padding_x = 20
+        self.padding_x = 5
         self.padding_y = 10
 
         self.mouse_in = False
@@ -102,23 +89,24 @@ class DropDown(wx.Control):
     def OnDrawWidget(self, dc):
         fnt = self.parent.GetFont()
         dc.SetFont(fnt)
-        dc.SetTextForeground(TEXT_COLOR)
+        dc.SetTextForeground('black')
         dc.SetPen(wx.TRANSPARENT_PEN)
 
         w, h = self.GetSize()
-        lbl_w, lbl_h = GetTextExtent(self.GetValue())
+        lbl_w, lbl_h = dc.GetTextExtent(self.GetValue())
 
         if self.mouse_down:
-            bg_color = wx.Colour(ACCENT_COLOR)
+            bg_color = wx.Colour('#e1e1e1')
         elif self.mouse_in:
-            bg_color = wx.Colour(DROPDOWN_BG_COLOR)
+            bg_color = wx.Colour('#e1e1e1').ChangeLightness(125)
         else:
-            bg_color = wx.Colour(DROPDOWN_BG_COLOR).ChangeLightness(85)
+            bg_color = wx.Colour('#e1e1e1').ChangeLightness(85)
 
+        dc.SetPen(wx.Pen('#a0a0a0'))
         dc.SetBrush(wx.Brush(bg_color))
-        dc.DrawRoundedRectangle(0, 0, w, h, 4)
+        dc.DrawRectangle(0, 0, w, h)
         dc.DrawText(self.GetValue(), self.padding_x, int((h / 2) - (lbl_h / 2)))
-        dc.DrawBitmap(ICON_DROPDOWN_ARROW.GetBitmap(), (w - 28), int((h / 2) - (lbl_h / 2) - 2))
+        dc.DrawBitmap(ICON_DROPDOWN_ARROW.GetBitmap(), (w - 28), int((h / 2) - (lbl_h / 2) - 5), True)
 
     def OnSetFocus(self, event):
         self.focused = True
@@ -144,6 +132,10 @@ class DropDown(wx.Control):
     def OnMouseUp(self, event):
         self.mouse_down = False
         self.OnClick()
+        self.UpdateDrawing()
+
+    def set_value(self, value):
+        self.value = value
         self.UpdateDrawing()
 
     def DoGetBestSize(self):
