@@ -50,10 +50,7 @@ class Main(wx.Frame):
 
         elif keycode == wx.WXK_NUMPAD5:
             self.tracker_tab.serialise(0)
-
-        elif keycode == wx.WXK_NUMPAD6:
-            self.tracker_tab.serialise(0)
-
+            
         evt.Skip()
 
     def key_up(self, evt):

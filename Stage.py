@@ -1,6 +1,3 @@
-from Day import Day
-import datetime
-
 class Stage:
     def __init__(self, name):
         self.name = name
